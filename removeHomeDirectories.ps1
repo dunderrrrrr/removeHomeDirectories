@@ -3,7 +3,7 @@ Param ([switch] $force)
 echo "##### SCRIPT START ####"
 Get-Date -Format "dddd dd/MM/yyyy HH:mm:ss"
  
-$oupath = "OU=Users,OU=LABB,DC=test,DC=local"
+$oupath = "OU=Leaver,OU=Mogard_AB,DC=MG,DC=local"
 
 $dirs_path = Get-ADUser -Filter 'enabled -eq $false' -SearchBase $oupath -Properties HomeDirectory, samAccountName | Select HomeDirectory, samAccountName
 $dirs_count = $dirs_path.Count
@@ -15,7 +15,7 @@ function hardDelete {
             $pathExists = Test-Path -Path $_.HomeDirectory
             if ($pathExists) {
                 echo "Removing: $($_.HomeDirectory) ($($_.samAccountName))"
-                Remove-item $_.HomeDirectory -Recurse
+                Remove-item $_.HomeDirectory -Recurse -Force
             } else {
                 echo "Info: Path $($_.HomeDirectory) does not exist ($($_.samAccountName))"
             }
@@ -27,7 +27,8 @@ function hardDelete {
 }
 
 Write-Output "`nHomedirs found:"
-Write-Output $dirs_path
+Write-Output $dirs_path | fl
+Write-Output "Total path count: $($dirs_count)"
 
 if ($force) {
     hardDelete

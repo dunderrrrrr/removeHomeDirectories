@@ -3,7 +3,7 @@ Param ([switch] $force)
 echo "##### SCRIPT START ####"
 Get-Date -Format "dddd dd/MM/yyyy HH:mm:ss"
  
-$oupath = "OU=Leaver,OU=Mogard_AB,DC=MG,DC=local"
+$oupath = "OU=Leaver,OU=customer,DC=MG,DC=local"
 
 $dirs_path = Get-ADUser -Filter 'enabled -eq $false' -SearchBase $oupath -Properties HomeDirectory, samAccountName | Select HomeDirectory, samAccountName
 $dirs_count = $dirs_path.Count
